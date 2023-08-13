@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Linux</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><strong>Muzna's</strong> <span>Cloud Portfolio</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="landing.html">Linux</a></li>
+							<li><a href="networking.html">Networking</a></li>
+							<li><a href="databases.html">Databases</a></li>
+							<li><a href="python.html">Phython</a></li>
+							<li><a href="aws.html">AWS Major Services</a></li>
+
+
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Linux Software Management System</h1>
+									</header>
+									<p>In order to update the Linux machine using the package manager and install the AWS Command Line Interface (AWS CLI) we first need to use SSH to connect to an Amazon Linux EC2 instance</p>
+									<p>Firstly, we download the pem file, then we open a terminal window, and change directory cd to the directory where the pem file was downloaded. 
+										to access the file we will run  "cd ~/Downloads" command.</p>
+									<p>To change the permissions on the key to be read-only, we run the command: "chmod 400 project.pem"</p>
+									<p>Next, we return to the EC2 Console and select Instances. Check the box next to the instance you want to connect to 
+										and in the Description tab copy the IPv4 Public IP value and type "yes" after using this command: "ssh -i labsuser.pem ec2-user@10.0.10.163
+									</p>
+
+									<p>
+										Secondly, we update our Linux machine. To query repositories for available updates, enter "sudo yum -y check-update" and to apply security-related updates, enter "sudo yum update --security".
+										To update packages, we enter "sudo yum -y upgrade".
+									</p>
+									<p>To view the install of httpd and view the history of updates, enter "sudo yum install httpd -y"</p>
+									<p>Then we downgrade a package that has been updated through the yum package manager by doing the following steps:
+										<ul>
+											<li>Using the yum history to list what has been installed and updated
+											</li>
+											<li>Rolling back to the most recent updates in the history list</li>
+										</ul>
+									</p>
+									<p>To view the history of updates, enter "sudo yum history list" . In the output, under the ID column, we make a note of the number for EC2 ...  to use in the history info task.</p>
+									<p>To view the most recent set of updates, enter sudo yum history info 1 </p>
+									<p>Lastly, we install the AWS CLI on Red Hat Linux. To verify that Python is installed, we enter "python3 --version"</p>
+									<p>To see if the pip package manager is already installed. we enter this command:"pip3 --version"</p>
+									<p>In order to install the AWS CLI, download the installation file using the curl command.</p>
+									<p>curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"</p>
+									<p>The above command write the downloaded file to the current directory with the local name awscliv2.zip.</p>
+									<p>Then we unzip the installer: "unzip awscliv2.zip"</p>
+									<p>Run the install program: "sudo ./aws/install"</p>
+									<p>To verify that the AWS CLI is now working, enter the following command and press Enter.
+										aws help</p>
+									<p>At the : prompt, enter q to exit. And we make copy of aws_access_key_id and aws_secret_access_key</p>
+									<p>Lastly, we go back to terminal and run the command "aws configure"</p>
+									<p>At the prompts, enter the following information:
+										<ul>
+											<li>
+												For the AWS Access Key ID, leave blank and press Enter.
+											</li>
+										
+										<li>For the AWS Secret Access Key, leave blank and press Enter.</li>
+										<li>For the Default region name, enter us-west-2 and press Enter.</li>
+										<li>For the Default output format, enter json and press Enter.</li>
+										<li>For the Default output format, enter json and press Enter.</li>
+										<li>After the information is entered, the appropriate credential files are created automatically.
+										</li>
+										<li>To open the credential file, enter the command sudo nano ~/.aws/credentials
+										</li>
+										
+										</ul>
+										 </p>
+										 <p>Press ctrl + O to save and Press ctrl + X to exit the file</p>
+										 <p>Write the following command with instance id:</p>
+										 <p>"aws ec2 describe-instance-attribute --instance-id i-1234567890abcdefg --attribute instanceType"
+										</p>
+										<h3>Video Demonstration:</h3>
+										<iframe title="vimeo-player" src="https://player.vimeo.com/video/845565490?h=b18076b711" width="1080" height="500" frameborder="0"    allowfullscreen></iframe>
+								</div>
+							</section>
+
+					</div>
+
+				<!-- Contact -->
+					<section id="contact">
+						<div class="inner">
+							
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Email</h3>
+										<a href="#">muznatallat77@gmail.com</a>
+									</div>
+								</section>
+								
+								
+							</section>
+						</div>
+					</section>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<ul class="icons">
+								
+								
+								<li><a href="https://www.linkedin.com/in/muzna-c-421908178" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+							</ul>
+							
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

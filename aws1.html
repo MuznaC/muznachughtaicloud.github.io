@@ -1,0 +1,431 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Muzna's Cloud Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><strong>Muzna's</strong> <span>Cloud Portfolio</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="landing.html">Linux</a></li>
+							<li><a href="networking.html">Networking</a></li>
+							<li><a href="databases.html">Databases</a></li>
+							<li><a href="python.html">Phython</a></li>
+							<li><a href="aws.html">AWS Major Services</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Using Auto Scaling in AWS (Linux)</h1>
+									</header>
+									<h3>Task 1: Creating a new AMI for Amazon EC2 Auto Scaling</h3>
+                                    <p>In this task, we launch a new EC2 instance and then create a new AMI based on that running instance. we use the AWS CLI on the Command Host EC2 instance to 
+                                      perform all of these operations.</p>
+                                    <h4>Task 1.1: Connecting to the Command Host instance</h4>
+                                    <p>First we  use EC2 Instance Connect to connect to the EC2 instance. we can use this instance to run AWS CLI commands.
+                                        <ul>
+                                            <li>In the EC2 Management Console, we choose Instances and select the Instance and choose connect.</li>
+                                            <li>On the EC2 Instance Connect tab, choose Connect.</li>
+                                            <img src="images/a1.png" alt="data" width="720" height="406">
+                                                
+                                        </ul>
+                                    </p>
+                                    <h4>Task 1.2: Configuring the AWS CLI</h4>
+                                    <ul>
+                                    <li>
+                                    <p>To confirm that the Region in which the Command Host instance is running is the same as the lab (the us-west-2 Region), 
+                                        run the following command:
+                                        <p><b>curl http://169.254.169.254/latest/dynamic/instance-identity/document | grep region</b></p>
+                                        we make note of the region from the output of this command.
+                                    </p>
+                                    <img src="images/a2.png" alt="data" width="720" height="362">
+                                    </li>
+                                    <li>
+                                    <p>To update the AWS CLI software with the correct credentials, run the following command:
+                                        <p><b>aws configure</b></p>
+                                    </p>
+                                    <img src="images/a3.png" alt="data" width="719" height="361">
+                                    </li>
+                                    <li>
+                                        At the prompts, enter the following information:
+                                        <ul>
+                                            <li>AWS Access Key ID: Press Enter.</li>
+                                            <li>AWS Secret Access Key: Press Enter.</li>
+                                            <li>Default region name: Enter the name of the Region from the previous steps in this task (for example, us-west-2). 
+                                                If the Region is already displayed, press Enter.</li>
+                                            <li>Default output format: Enter json</li>
+                                        </ul>
+                                        <p>Now you are ready to access and run the scripts detailed in the following steps.</p>
+                                    </li>
+                                    <li>To access these scripts, enter the following command to navigate to their directory:
+                                        <p><b>cd /home/ec2-user/</b></p>
+                                        <img src="images/a4.png" alt="data" width="720" height="360">
+                                    </li>
+
+
+                                </ul>
+                                <h3>Task 1.3: Creating a new EC2 Instance</h3>
+                                <p>you use the AWS CLI to create a new instance that hosts a web server. 
+
+                                    <ul>
+                                        <li>To inspect the UserData.txt script that was installed for you as part of the Command Host creation, 
+                                            run the following command:<p><b>more UserData.txt</b></p>
+                                            <img src="images/a5.png" alt="data" width="720" height="408">
+                                        </li>
+                                        <li>Run the following command with the credential details:
+                                            <p><b>aws ec2 run-instances --key-name vockey --instance-type t3.micro --image-id ami-04d0def24be0d27d6 --user-data file:///home/ec2-user/UserData.txt --security-group-ids sg-0fdc8de6ebdc55676 
+                                                --subnet-id subnet-04d62fc7b677bd532 --associate-public-ip-address --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=WebServer}]' --output text --query 'Instances[*].InstanceId'</b></p>
+                                                <p>The output of this command provides you with an InstanceId</p>
+                                                <img src="images/a7.png" alt="data" width="720" height="408">
+
+                                        </li>
+                                        <li>Make note of the InstanceId value</li>
+                                        <li>To use the aws ec2 wait instance-running command to monitor this instance's status. Run the following command:
+                                            <p><b>aws ec2 wait instance-running --instance-ids  i-0a156adfaf3226690 </b></p>
+                                            <img src="images/a8.png" alt="data" width="720" height="408">
+
+                                        </li>
+                                        <li>Your instance starts a new web server</li>
+                                        <li>To obtain the public DNS name, use the following command:
+                                            <p><b>aws ec2 describe-instances --instance-id i-0a156adfaf3226690 --query 'Reservations[0].Instances[0].NetworkInterfaces[0].Association.PublicDnsName'
+                                            </b></p>
+                                            <p>the output will return the DNS </p>
+                                            <img src="images/a9.png" alt="data" width="720" height="408">
+
+                                        </li>
+                                        <li>Run the following command:
+                                            <p><b>http://ec2-54-202-131-129.us-west-2.compute.amazonaws.com/index.php</b></p>
+                                            <img src="images/a10.png" alt="data" width="720" height="408">
+
+                                        </li>
+
+                                    </ul>
+                                </p>
+                                <h4>Task 1.4: Creating a Custom AMI</h4>
+                                <p>We create a new AMI based on that instance that we just created.
+                                    <ul>
+                                        <li>To create a new AMI based on this instance, we run following command with the new instance id:
+                                            <p><b>aws ec2 create-image --name WebServerAMI --instance-id  i-0a156adfaf3226690</b></p>
+                                            <img src="images/a11.png" alt="data" width="720" height="408">
+
+                                        </li>
+
+                                    </ul>
+                                </p>
+                                <h3>Task 2: Creating an auto scaling environment</h3>
+                                <p>In this task, we create a load balancer that pools a group of EC2 instances under a single Domain Name System (DNS) address. 
+                                    we use auto scaling to create a dynamically scalable pool of EC2 instances based on the image that we created in the previous task. 
+                                    Finally, we create a set of alarms that scale out or scale in the number of instances in your load balancer group whenever the CPU performance of any 
+                                    machine within the group exceeds or falls below a set of specified thresholds.</p>
+                                    <p>
+                                    We can perform the following task by using either the AWS CLI or the AWS Management Console. I am using AWS Management Console.</p>
+                                <h4>Task 2.1: Creating an Application Load Balancer</h4>
+                                <p>We create a load balancer that can balance traffic across multiple EC2 instances and Availability Zones
+                                    <ul>
+                                        <li>
+                                            On the EC2 Management Console, in the left navigation pane, locate the Load Balancing section, and choose Load Balancers.
+                                            <img src="images/a12.png" alt="data" width="720" height="408">
+
+                                        </li>
+                                        <li>Choose Create load balancer.</li>
+                                        <li>In the Load balancer types section, for Application Load Balancer, choose Create.</li>
+                                        <img src="images/a13.png" alt="data" width="720" height="408">
+
+                                        <li>On the Create Application Load Balancer page, in the Basic configuration section, configure the following option:
+                                            <ol>
+                                                <li>For Load balancer name, enter WebServerELB</li>
+                                            </ol>
+                                            <img src="images/a14.png" alt="data" width="720" height="408">
+
+                                        </li>
+                                        <li>In the Network mapping section, configure the following options:
+                                            <ul>
+                                                <li>
+                                                Select VPC & For Mappings, choose both Availability Zones listed. for the first Availability Zone, choose Public Subnet 1 and
+                                                the second Availability Zone, choose Public Subnet 2.
+                                               </li>
+                                           </ul>
+                                            These options configure the load balancer to operate across multiple Availability Zones.
+                                            <img src="images/a15.png" alt="data" width="720" height="408">
+
+                                        </li>
+                                        <li>For Security group remove any default and choose HTTPAccess.
+                                            <img src="images/a16.png" alt="data" width="720" height="408">
+
+                                        </li>
+
+                                        <li>In the Listeners and routing section, choose the Create target group link.</li>
+                                        <li>On the Specify group details page, in the Basic configuration section, configure the following options:
+                                            <ul>
+                                                <li>For Choose a target type, choose Instances.</li>
+                                                <li>For Target group name, enter webserver-app</li>
+                                            </ul>
+                                            <img src="images/a18.png" alt="data" width="720" height="408">
+                                        </li>
+                                        <li>In the Health checks section, for Health check path, enter <b> /index.php</b>and choose next
+                                            <img src="images/a19.png" alt="data" width="720" height="408">  
+
+                                        </li>
+                                        <li>On the Register targets page, choose create target group.
+                                            
+                                        </li>
+                                        <img src="images/a20.png" alt="data" width="720" height="408">  
+
+                                        <li>Return to the Load balancers browser tab, and locate the Listeners and routing section. 
+                                            For Default action, choose  Refresh to the right of the Forward to dropdown list.</li>
+                                        <img src="images/a21.png" alt="data" width="720" height="408">  
+                                        <li>From the Forward to dropdown list, choose webserver-app.</li>
+                                        <li>At the bottom of the page, choose Create load balancer.</li>
+                                        <img src="images/a22.png" alt="data" width="720" height="408">  
+
+                                        <li>To view the WebServerELB load balancer that you created, choose View load balancer.</li>
+                                        <img src="images/a23.png" alt="data" width="720" height="408">  
+                                        <li>make note of DNS name of load balancer.</li>
+
+                                    </ul>
+                                </p>
+                                <h4>Task 2.2: Creating a launch template</h4>
+                                <p>In this task, we create a launch template for our Auto Scaling group. A launch template is a template that an 
+                                    Auto Scaling group uses to launch EC2 instances. When we create a launch template, we specify information for the instances, 
+                                    such as the AMI, instance type, key pair, security group, and disks.
+                                    <ul>
+                                        <li>On the EC2 Management Console, locate the Instances section, and choose Launch Templates and choose create launch template.
+
+                                        </li>
+                                        <img src="images/a24.png" alt="data" width="720" height="408">  
+
+                                        <li>On the Create launch template page, in the Launch template name and description section, configure the following options:
+                                            <ul>
+                                                <li>Set the launch template name</li>
+                                                <li>Set Template version description</li>
+                                                <li>For Auto Scaling guidance, select  Provide guidance to help me set up a template that I can use with EC2 Auto Scaling.</li>
+                                            </ul>
+                                        </li>
+
+                                        <li>In the Application and OS Images (Amazon Machine Image) - required section, choose the My AMIs tab. Check that WebServerAMI is already chosen.
+
+                                        </li>
+                                        <img src="images/a25.png" alt="data" width="720" height="408">  
+
+                                        <li>In the Instance type section, choose the Instance type dropdown list, and choose t3.micro.</li>
+                                        <img src="images/a26.png" alt="data" width="720" height="408">  
+
+                                        <li>In the Key pair (login) section, confirm that the Key pair name dropdown list is set to Don't include in launch template.
+
+                                        </li>
+
+                                        <li>In the Network settings section, choose the Security groups dropdown list, and choose HTTPAccess.</li>
+                                        <img src="images/a27.png" alt="data" width="720" height="408">  
+
+                                        <li>Choose Create launch template & view launch templates. </li>
+                                        <img src="images/a28.png" alt="data" width="720" height="408">  
+
+                                    </ul>
+                                </p>
+                                <h4>Task 2.3: Creating an Auto Scaling group</h4>
+                                <p>In this task, we use your launch template to create an Auto Scaling group.
+                                    <ul>
+                                        <li>Choose  web-app-launch-template, and then from the Actions  dropdown list, choose Create Auto Scaling group.</li>
+                                        <img src="images/a29.png" alt="data" width="720" height="408">  
+
+
+                                        <li>On the Choose launch template or configuration page, in the Name section, for Auto Scaling group name enter name and choose Next.</li>
+
+                                        <li>On the Choose instance launch options page, in the Network section, configure the following options:
+                                            <ol>
+                                                <li>Select VPC</li>
+                                                <li>From the Availability Zones and subnets dropdown list, choose Private Subnet 1 (10.0.2.0/24) 
+                                                    and Private Subnet 2 (10.0.4.0/24) and choose Next.
+                                                </li>
+                                            </ol>    
+                                        </li>
+                                        <img src="images/a30.png" alt="data" width="720" height="408">  
+
+                                        <li>On the Configure advanced options – optional page, configure the following options: 
+                                             <ul>
+                                                <li>In the Load balancing – optional section, choose Attach to an existing load balancer.</li>
+                                                <li>In the Attach to an existing load balancer section, configure the following options:
+                                                    <ol>
+                                                        <li>Choose Choose from your load balancer target groups.</li>
+                                                        <li>From the Existing load balancer target groups dropdown list, choose webserver-app | HTTP.</li>
+                                                    </ol>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <img src="images/a31.png" alt="data" width="720" height="408">  
+
+                                        <li>In the Health checks section, under Additional health check types, select  Turn on Elastic Load Balancing health checks and choose Next.</li>
+                                        <img src="images/a32.png" alt="data" width="720" height="408">  
+
+                                        <li>On the Configure group size and scaling policies – optional page, configure the following options: 
+                                        <ul>
+                                            <li>In the Group size – optional section, enter the following values: 
+                                                <ol>
+                                                    <li>Desired capacity:2</li>
+                                                    <li>Minimum capacity: 2</li>
+                                                    <li>Maximum capacity: 4</li>
+                                                </ol>
+                                            </li>
+                                            <li>In the Scaling policies – optional section, configure the following options:
+                                                <ol>
+                                                    <li>Choose  Target tracking scaling policy.</li>
+                                                    <li>For Metric type, choose Average CPU utilization.</li>
+                                                    <li>For Target value, enter 50</li>
+                                                </ol>
+                                                This change tells auto scaling to maintain an average CPU utilization across all instances of 50 percent. Auto scaling automatically adds or removes capacity
+                                                 as required to keep the metric at or close to the specified target value. It adjusts to fluctuations in the metric due to a fluctuating load pattern.
+                                            </li>
+                                            
+                                            
+                                        </ul>
+                                        </li>
+                                        <img src="images/a33.png" alt="data" width="720" height="408">  
+                                        <img src="images/a34.png" alt="data" width="720" height="408">  
+
+
+                                        <li>Choose Next.
+
+                                        </li>
+                                        <li>On the Add notifications – optional page, choose Next.</li>
+                                        <li>On the Add tags – optional page, choose Add tag and configure the following options:
+                                            <ol>
+                                                <li>For Key, enter Name</li>
+                                                <li>For Value - optional, enter WebApp</li>
+                                            </ol>
+                                        </li>
+                                        <img src="images/a35.png" alt="data" width="720" height="408">  
+
+                                        <li>Choose Next.</li>
+                                        <li>On the Review page, choose Create Auto Scaling group.</li>
+
+
+                                        
+                                          
+                                        
+
+                                    </ul>
+                                        
+                                    
+                                </p>
+                                <h3>Task 3: Verifying the auto scaling configuration</h3>
+                                <p>In this task, you verify that both the auto scaling configuration and the load balancer are working by accessing a pre-installed script on one of 
+                                    your servers that will consume CPU cycles, which invokes the scale out alarm.</p>
+                                <p>
+                                    <ul>
+                                        <li>In the left navigation pane, choose Instances.</li>
+                                        <p>Two new instances named WebApp are being created as part of your Auto Scaling group. 
+                                            While these instances are being created, the Status check for these two instances is Initializing.
+                                        </p>
+                                        <p>Observe the Status check field for the instances until the status is 2/2 checks passed. Wait for the two new instances 
+                                            to complete initialization before you proceed to the next step.
+                                         </p>
+                                        <li>Once the instances have completed initialization, in the left navigation pane in the Load Balancing section, 
+                                            choose Target Groups, and then select  your target group, webserver-app.
+                                        </li>
+                                        <li>On the Targets tab, verify that two instances are being created. Refresh this list until the Health status 
+                                            of these instances changes to healthy.
+                                        </li>
+
+                                    </ul>
+                                </p>
+                                <img src="images/a36.png" alt="data" width="720" height="408">  
+                                <img src="images/a37.png" alt="data" width="720" height="408">  
+
+
+                                
+                                <h3>Task 4: Testing auto scaling configuration</h3> 
+                                <p>We can now test the web application by accessing it through the load balancer.
+                                    <ul>
+                                        <li>
+                                            Open a new web browser tab, and paste the DNS name of the load balancer that you copied earlier into the address bar, and press Enter.
+                                        </li>
+                                        <img src="images/a38.png" alt="data" width="820" height="408">  
+
+                                        <li>On the web page, choose Start Stress.</li>
+                                        <li>On the EC2 Management console, in the left navigation pane in the Auto Scaling section, choose Auto Scaling Groups.
+
+                                        </li>
+                                        <img src="images/a39.png" alt="data" width="720" height="408">  
+
+                                        <li>
+                                            Select  Web App Auto Scaling Group.
+                                        </li>
+                                        <li>
+                                            Choose the Activity tab. 
+                                        </li>
+                                        <img src="images/a40.png" alt="data" width="720" height="408">  
+
+                                        <p>After a few minutes, you should see your Auto Scaling group add a new instance. This occurs because Amazon CloudWatch detected 
+                                            that the average CPU utilization of your Auto Scaling group exceeded 50 percent, and your scale-up policy has been invoked in 
+                                            response.
+                                        </p>
+
+                                    </ul>
+                                </p>  
+ 
+
+                                        
+                                        
+									
+										
+								</div>
+							</section>
+
+					</div>
+
+				
+								
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<ul class="icons">
+								
+								
+								<li><a href="https://www.linkedin.com/in/muzna-c-421908178" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+							</ul>
+							
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Muzna's Cloud Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><strong>Muzna's</strong> <span>Cloud Portfolio</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="landing.html">Linux</a></li>
+							<li><a href="networking.html">Networking</a></li>
+							<li><a href="databases.html">Databases</a></li>
+							<li><a href="python.html">Phython</a></li>
+							<li><a href="aws.html">AWS Major Services</a></li>
+
+
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Monitoring Infrastructure</h1>
+									</header>
+                                    <h3>Task 1: Installing the CloudWatch agent</h3>
+                                    <p>To install CloudWatch agent, In the AWS Management Console go to menu and select Systems Manager and choose Run command. 
+                                        Select the AWS-ConfigureAWSPackage. Then scroll to the Command parameters section and configure the following information:
+                                        <ul>
+                                            <li>Action: Select Install.</li>
+                                            <li>Name: Enter AmazonCloudWatchAgent</li>
+                                            <li>Version: Enter latest</li>
+                                        </ul>
+                                        In the Targets section, select Choose instances manually, and then under Instances, select the check box next to Web Server.
+                                        This configuration installs the CloudWatch agent on the web server. then choose Run.
+                                    </p>
+                                    <p>After that, Wait for the Overall status to change to Success. Under Targets and outputs, choose  next to the instance, and then click View output</p>
+                                    <p>From left navigation pane, choose Parameter Store and configure the following information:
+                                        <ul>
+                                            <li>Name: Enter Monitor-Web-Server</li>
+                                            <li>Description: Enter Collect web logs and system metrics</li>
+                                            <li>Value: </br>
+                                                {
+                                                    "logs": {
+                                                      "logs_collected": {
+                                                        "files": {
+                                                          "collect_list": [
+                                                            {
+                                                              "log_group_name": "HttpAccessLog",
+                                                              "file_path": "/var/log/httpd/access_log",
+                                                              "log_stream_name": "{instance_id}",
+                                                              "timestamp_format": "%b %d %H:%M:%S"
+                                                            },
+                                                            {
+                                                              "log_group_name": "HttpErrorLog",
+                                                              "file_path": "/var/log/httpd/error_log",
+                                                              "log_stream_name": "{instance_id}",
+                                                              "timestamp_format": "%b %d %H:%M:%S"
+                                                            }
+                                                          ]
+                                                        }
+                                                      }
+                                                    },
+                                                    "metrics": {
+                                                      "metrics_collected": {
+                                                        "cpu": {
+                                                          "measurement": [
+                                                            "cpu_usage_idle",
+                                                            "cpu_usage_iowait",
+                                                            "cpu_usage_user",
+                                                            "cpu_usage_system"
+                                                          ],
+                                                          "metrics_collection_interval": 10,
+                                                          "totalcpu": false
+                                                        },
+                                                        "disk": {
+                                                          "measurement": [
+                                                            "used_percent",
+                                                            "inodes_free"
+                                                          ],
+                                                          "metrics_collection_interval": 10,
+                                                          "resources": [
+                                                            "*"
+                                                          ]
+                                                        },
+                                                        "diskio": {
+                                                          "measurement": [
+                                                            "io_time"
+                                                          ],
+                                                          "metrics_collection_interval": 10,
+                                                          "resources": [
+                                                            "*"
+                                                          ]
+                                                        },
+                                                        "mem": {
+                                                          "measurement": [
+                                                            "mem_used_percent"
+                                                          ],
+                                                          "metrics_collection_interval": 10
+                                                        },
+                                                        "swap": {
+                                                          "measurement": [
+                                                            "swap_used_percent"
+                                                          ],
+                                                          "metrics_collection_interval": 10
+                                                        }
+                                                      }
+                                                    }
+                                                   }
+                                                   
+                                                   
+                                            </li>
+                                        </ul>
+                                        choose create parameter. (This parameter will be referenced when starting the CloudWatch agent.)
+                                    </p>
+                                    <p>Now we use another Run Command to start the CloudWatch agent on the web server.In the left navigation pane, 
+                                        choose Run Command and Choose Run Command. Choose the  search bar, and then select the following:
+                                        <ul>
+                                            <li>Select Document name prefix.</li>
+                                            <li>Select Equals.</li>
+                                            <li>Enter AmazonCloudWatch-ManageAgent</li>
+                                            <li>Verify that the filter is Document name prefix : Equals : AmazonCloudWatch-ManageAgent and Press Enter.</li>
+                                        </ul>
+                                        Choose AmazonCloudWatch-ManageAgent, A new web browser tab opens that shows the definition of the command, Choose the Content tab, 
+                                        and scroll to the bottom to see the actual script that will run on the target instance. Close this window and go back to the Run Command window.
+                                    </p>
+                                    <p>
+                                        In the Command parameters section, configure the following information:
+                                        <ul>
+                                            <li>
+                                                Action: Select configure.
+                                            </li>
+                                            <li>
+                                                Mode: Select ec2.
+                                            </li>
+                                            <li>
+                                                Optional Configuration Source: Select ssm.
+                                            </li>
+                                            <li>
+                                                Optional Configuration Location: Enter Monitor-Web-Server
+                                            </li>
+                                            <li>
+                                                Optional Restart: Select yes.
+                                            </li>
+                                        </ul>
+                                        This configures the agent to use the configuration you previously stored in the Parameter Store.
+                                    </p>
+                                    <p>
+                                        In the Targets section, select Choose instances manually, In the Instances section, select the check box next to Web Server and Choose Run.
+                                    </p>
+                                    <p>
+                                        Wait for the Overall status to change to Success.
+                                    </p>
+									<h4>Video Demonstration of Task 1:</h4>
+                                    <iframe title="vimeo-player" src="https://player.vimeo.com/video/847455733?h=daa73843bd" width="640" height="360" frameborder="0"    allowfullscreen></iframe>
+
+                                    <h3>Task 2: Monitoring application logs using CloudWatch Logs</h3>
+
+                                    <p>Copy WebServerIP from credentials and paste it in the browser. you will see the test page. add /start to the browser URL.Keep this tab open.
+                                        From the Services  menu, choose CloudWatch. In the left navigation pane, choose Log groups. You should see two logs listed: HttpAccessLog and HttpErrorLog.
+                                        Choose HttpAccessLog, In the Logs streams section, choose the Log stream in the table (choose the name itself). It has the same ID as the EC2 instance that the log is attached to.
+                                     </p>
+                                     <h4>Create a metric filter in CloudWatch Logs</h4>
+                                     <p>In the left navigation pane, choose Log groups.Select the check box next to HttpAccessLog. From Action dropdown menu select Create metric filter.
+                                        the Filter pattern box: </br>
+                                        [ip, id, user, timestamp, request, status_code=404, size]
+                                     </p>
+                                     <p>In the Test pattern section, use the dropdown menu to select the EC2 instance id. It is be similar to i-0f07ab62aae4xxxx9. Choose Test pattern.
+                                        In result check result pattern.You should see at least one result with a $status_code of 404. This status code indicates that a page was requested 
+                                        that was not found.
+                                     </p>
+                                     <p>
+                                        Choose Next and go to the Create filter name section, in the Filter name box, enter 404Errors.In the Metric details section, configure the following information:
+
+                                        <ul>
+                                            <li>Metric namespace: Enter LogMetrics</li>
+                                            <li>Metric name: Enter 404Errors</li>
+                                            <li>Metric value: Enter 1</li>
+                                        </ul>
+                                        Choose Next and on the Review and create page, choose Create metric filter. This metric filter can now be used in an alarm.
+                                     </p>
+                                     <h4>Create an alarm using the filter</h4>
+                                     <p>In the 404Errors panel, choose the check box in the top-right corner.In the Metric filters section, choose Create alarm
+                                        Configure the following settings:
+                                        <ul>
+                                            <li>
+                                                In the Metrics section, for Period, select 1 minute.
+                                            </li>
+                                        </ul>
+                                        In the Conditions section, select the following:
+                                        <ul>
+                                            <li>
+                                                Whenever 404Errors is: Select  Greater/Equal
+                                            </li>
+                                            <li>than: Enter 5</li>
+                                        </ul>
+                                        choose Next.
+                                     </p>
+                                     <p>In the Notification section, configure the following:
+                                        <ul>
+                                            <li>
+                                                Select an SNS Topic: Select  Create new topic.
+                                            </li>
+                                            <li>
+                                                Email endpoints that will receive the notification: Enter an email address that you can access from the classroom.
+                                            </li>
+                                            <li>
+                                                Choose Create topic
+                                            </li>
+                                            <li>Choose Next</li>
+                                        </ul>
+                                     </p>
+                                     <p>
+                                        For Name and description, configure the following settings:
+                                        <ul>
+                                            <li>
+                                                Alarm name: Enter 404 Errors
+                                            </li>
+                                            <li>Alarm description: Enter Alert when too many 404s detected on an instance</li>
+                                            <li>Choose Next</li>
+                                            <li>Choose Create Alarm. Check an email, look for a confirmation message, and select the Confirm subscription link.</li>
+                                           
+                                        </ul>
+                                     </p>
+                                     <p>In the AWS Management Console. In the left navigation pane, choose CloudWatch.</p>
+                                     <p>Return to the web browser tab with the web server.Attempt to go to pages that do not exist by adding
+                                         a page name after the IP address. Repeat this step at least five times. For example, enter http://192.0.2.0/start2.
+                                         Each separate request generates a separate log entry.
+                                     </p>
+                                     <p>Wait 1-2 minutes for the alarm to trigger. In the AWS Management Console, 
+                                        we can occasionally choose Refresh to update the status.
+                                        Check email. You should have received an email with the subject ALARM: "404 Errors".
+                                     </p>
+                                     <p>This task demonstrates how you can create an alarm from application log data and receive alerts when unusual behavior is detected in the log file. 
+                                        The log file is accessible within CloudWatch Logs 
+                                        to perform further analysis to diagnose the activities that triggered the alarm.
+                                    </p>
+
+                                    <h4>
+                                        Video Demonstration of Task 2:
+                                    </h4>
+                                    
+                                    <iframe title="vimeo-player" src="https://player.vimeo.com/video/847475651?h=a01f37051c" width="640" height="360" frameborder="0"    allowfullscreen></iframe>
+
+                                    <h3>Task 3: Monitoring instance metrics using CloudWatch
+                                    </h3>
+
+                                    <p>On the Services  menu, choose EC2 and Instances. Select the check box next to Web Server. then Choose the Monitoring tab to examine
+                                        the metrics presented. we can also select a chart to display more information.
+                                    </p>
+                                    <p>
+                                        CloudWatch captures metrics about CPU, disk, and network usage on the instance. These metrics view the instance from the outside as a virtual 
+                                        machine but do not give insight into what is running inside the instance, such as measuring free memory or free disk space. Fortunately, we can 
+                                        obtain information about what is happening inside the instance by using information that the CloudWatch agent captures because the CloudWatch agent 
+                                        runs inside the instance to collect metrics.
+
+
+                                    </p>
+                                    <p>From the Services menu, select CloudWatch, then choose Metrics and choose all Metrics.</p>
+                                    <p>Choose CWAgent, and then choose device, fstype, host, path. we can see the disk space metrics that the CloudWatch agent is capturing.</p>
+                                    <p>Above the table, choose CWAgent (in the line that says All > CWAgent > device, fstype, host, path). Choose host.You see metrics relating to system memory.
+                                    </p>
+                                    <p>Explore the other metrics that CloudWatch is capturing. These are automatically generated metrics coming 
+                                    from the AWS services that have been used in this AWS account.
+                                    </p>
+
+                                    <h4>Video Demonstration of Task 3:</h4>
+                                    <iframe title="vimeo-player" src="https://player.vimeo.com/video/847475927?h=22d84b63ac" width="640" height="360" frameborder="0"    allowfullscreen></iframe>
+
+
+                                    <h3>Task 4: Creating real time notifications</h3>
+                                    <p>In the left navigation pane expand  Events, choose Rules.</p>
+                                    <p>If the CloudWatch Events is now EventBridge message is displayed, select Back to CloudWatch Events.Choose Create rule.</p>
+                                    <p>In the Event Source section, configure the following settings:
+                                        <ul>
+                                            <li>Service Name: Select EC2.</li>
+                                            <li>Event Type: Select EC2 Instance State-change Notification.</li>
+                                            <li>Select the check box for  Specific state(s).</li>
+                                            <li>From the dropdown menu, select stopped and terminated.</li>
+                                        </ul>
+                                        
+                                    </p>
+                                    <p>In the Targets section on the right, configure the following settings:
+                                        <ul>
+                                            <li>Select   Add target.</li>
+                                            <li>In the dropdown menu with  Lambda function, select SNS topic.</li>
+                                            <li>For Topic, select the Default_CloudWatch_Alarms_Topic option.</li>
+                                        </ul>
+                                    </p>
+                                    <p>At the bottom of the page, choose Configure details</p>
+                                    <p>In the Rule definition, configure the following settings:
+                                        <ul>
+                                            <li>For Name, enter Instance_Stopped_Terminated and choose Create Rule.</li>
+                                        </ul>
+                                    </p>
+                                    <h4>Configure a real time notification</h4>
+                                    <p>We can configure Amazon Simple Notification Service (Amazon SNS) to send the real time notifications 
+                                        to your phone via SMS, or to your email address. Because configuring SMS messaging requires opening a ticket
+                                        with AWS Support as well as time to configure the changes to your account, you will use the same email address you used 
+                                        earlier to complete this exercise.
+                                    </p>
+                                    <p>On the Services  menu, choose Simple Notification Service.choose Topics. 
+                                        Choose the link in the Name column, we can see our email linked with it for subscription.
+                                    </p>
+                                    <p>On the Services  menu, choose EC2. go Instances and stop it. we will then receive an email with details 
+                                        about the instance that was stopped.
+                                    </p>
+
+                                    <h4>Video Demonstration of Task 4:</h4>
+                                    <iframe title="vimeo-player" src="https://player.vimeo.com/video/847476058?h=a7b87a8e6f" width="640" height="360" frameborder="0"    allowfullscreen></iframe>
+
+
+                                    <h3>Task 5: Monitoring for infrastructure compliance</h3>
+                                    <p>With AWS Config, we can assess, audit, and evaluate the configurations of our AWS resources. AWS Config continuously monitors and 
+                                        records your AWS resource configurations and allows us to automate the evaluation of recorded configurations against desired configurations.
+                                    </p>
+                                    <p>n this task, you activate AWS Config rules to ensure compliance of tagging and Amazon Elastic Block Store (Amazon EBS) volumes.</p>
+                                    <p>On the Services  menu, choose Config.</p>
+                                    <p>If a Get started button appears, do the following:
+                                        <ul>
+                                            <li>Choose Get started</li>
+                                            <li>Choose Next and Next again</li>
+                                            <li>And Choose Confirm</li>
+                                        </ul>
+                                        In the left navigation pane, choose Rules, the AWS Managed Rules section in the search field, enter required-tags and select ratio button next to required-tags and Choose Next.
+                                    </p>
+                                    <p>In the Configure rule page, scroll to Parameters, and configure the following settings:
+
+                                    <ul>
+                                        <li>To the right of tag1Key, enter project (replace any existing value).</li>
+                                        <li>Choose Next and choose Add Rules. In the AWS Managed Rules section in the search field, enter ec2-volume-inuse-check.</li>
+                                    </ul>
+
+                                    </p>
+                                    <p>  Under Resources in scope select Compliant from the list. The following should be among the results:
+                                        <ul>
+                                            <li>required-tags: A compliant EC2 instance (because the Web Server has a project tag) and many non-compliant resources 
+                                                that do not have a project tag.
+                                            </li>
+                                            <li>ec2-volume-inuse-check: One compliant volume (attached to an instance) and one non-compliant volume (not attached to an instance)</li>
+                                        </ul>
+                                        AWS Config has a large library of pre-defined compliance checks, and you can create additional checks by writing your own AWS Config rule using Lambda.
+                                    </p>
+
+                                    <h4>Video Demonstration of Task 5:</h4>
+                                    <iframe title="vimeo-player" src="https://player.vimeo.com/video/847476023?h=7bb738d293" width="640" height="360" frameborder="0"    allowfullscreen></iframe>
+
+
+								</div>
+							</section>
+
+					</div>
+
+				<!-- Contact -->
+					<section id="contact">
+						<div class="inner">
+							
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Email</h3>
+										<a href="#">muznatallat77@gmail.com</a>
+									</div>
+								</section>
+								
+								
+							</section>
+						</div>
+					</section>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<ul class="icons">
+								
+								
+								<li><a href="https://www.linkedin.com/in/muzna-c-421908178" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+							</ul>
+							
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

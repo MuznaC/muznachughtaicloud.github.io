@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Muzna's Cloud Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><strong>Muzna's</strong> <span>Cloud Portfolio</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="landing.html">Linux</a></li>
+							<li><a href="networking.html">Networking</a></li>
+							<li><a href="databases.html">Databases</a></li>
+							<li><a href="python.html">Phython</a></li>
+							<li><a href="aws.html">AWS Major Services</a></li>
+
+
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Automating Deployments with AWS CloudFormation</h1>
+									</header>
+									<h3>Task 1: Deploy a CloudFormation Stack</h3>
+                                    <p>In this tasks, we will begin by deploying a CloudFormation stack that creates a VPC and edit CloudFormation template.</p>
+                                    <p>In the AWS Management Console, on the Services  menu, click CloudFormation.
+
+                                    </p>
+                                    <img src="images/aw1.png" alt="data" width="720" height="408">  
+
+                                    <p>Click Create stack then:
+                                        <ol>
+                                            <li>Click  Upload a template file</li>
+                                            <li>Click Browse or Choose file and upload the template file you downloaded earlier</li>
+                                            <li>Click Next</li>
+                                        </ol>
+                                    </p>
+
+                                    
+                                     <p>On the Specify Details page, configure:
+                                        <ol>
+                                            <li>Enter Stack Name</li>
+                                        </ol>
+                                        In the Parameters section, The CloudFormation will be prompting for the IP address ('CIDR') range for the VPC and Subnet.
+                                         A default value has been specified by the template, so there is no need to modify these values.
+                                     </p>   
+                                     <img src="images/aw2.png" alt="data" width="720" height="408">  
+
+                                     <p>The next page will be the Options page, it can be used to specify additional parameters. we will leave settings at their default values and click Next.</p>
+                                     <img src="images/aw3.png" alt="data" width="720" height="408">  
+
+                                     <p>The Review page displays a summary of all settings. Some of the resources are defined with custom names, which can lead to naming conflicts. Therefore, 
+                                        CloudFormation prompts for an acknowledgement that custom names are being used. Here Click Next.
+                                     </p>
+                                     <img src="images/aw4.png" alt="data" width="720" height="408">  
+
+                                     <p>Click Submit</p>
+                                     <p>The stack will now enter the CREATE_IN_PROGRESS status.</p>
+                                     <img src="images/aw5.png" alt="data" width="720" height="408">  
+
+                                     <p>Click the Events tab and if you scroll through the listing.
+
+                                        The listing shows (in reverse order) the activities performed by CloudFormation, such as starting to create a resource and then completing the resource creation. 
+                                        Any errors encountered during the creation of the stack will be listed in this tab.
+                                    </p>
+                                    <img src="images/aw6.png" alt="data" width="720" height="408">  
+
+                                    <p>Click the Resources tab. The listing shows the resources that are being created.</p>
+                                    <p>Wait until the status changes to CREATE_COMPLETE.</p>
+
+
+                                    <h3>Task 2: Add an Amazon S3 Bucket to the Stack</h3>
+                                    <p>In this task, you will gain experience in editing a CloudFormation template. We will add Amazon S3 bucket and then update it in the Stack with revised template.</p>
+                                    <p>For creating the template we will add the following code in the Resources section of the template and save the document:
+                                        <ul>
+                                            <li>
+                                                <b> MyS3Bucket:
+                                                    Type: AWS::S3::Bucket</b>
+                                            </li>
+                                        </ul>
+                                    </p>
+                                    <img src="images/aw8.png" alt="data" width="720" height="408">  
+
+                                    <p>The Indents are important in YAML, we should use two spaces for each indent</p>
+
+                                    <p>In the CloudFormation console, select  Lab and click Update.</p>
+
+                                    <p>Choose Replace current template, then choose Upload a template file. Click Choose file, 
+                                        then browse to and select the task1.yaml file that you modified.and then Click Next.
+                                    </p>
+                                    <p>On the Specify stack details page & On the Configure stack options page we leave the setting as is and submit the stack.</p>
+                                    <img src="images/aw9.png" alt="data" width="720" height="408">  
+
+
+                                    <h3>Task 3: Add an Amazon EC2 Instance to the Stack</h3>
+                                    <p>In this task, we will add an Amazon EC2 instance to the template, then update the stack with the revised template.
+
+                                    </p>
+                                    <img src="images/aw10.png" alt="data" width="720" height="408">  
+
+                                    <p>First, we open our template and update the template by adding these lines in the Parameters section: 
+                                        <ul>
+                                        <li>
+                                        <b>AmazonLinuxAMIID: </br>
+                                            Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id> </br>
+                                            Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+                                        </b>
+                                        </li>
+                                        </ul>
+                                    </p>
+                                    <img src="images/aw15.png" alt="data" width="720" height="408">  
+
+                                    <p>This parameter uses the AWS Systems Manager Parameter Store to retrieve the latest AMI (specified in the Default parameter, which in this case is Amazon Linux 2) for the stack's region. 
+                                        This makes it easy to deploy stacks in different regions without having to manually specify an AMI ID for every region.
+                                    </p>
+                                    <img src="images/aw16.png" alt="data" width="720" height="408">  
+
+                                    <p>Now, we update the template to add an Amazon EC2 instance with the following Properties:
+                                        <ul>
+                                            <li>ImageId: Refer to AmazonLinuxAMIID, which is the parameter added in the previous step</li>
+                                            <li>InstanceType: t3.micro</li>
+                                            <li>SecurityGroupIds: Refer to AppSecurityGroup</li>
+                                            <li>SubnetId: Refer to PublicSubnet</li>
+                                            <li>Tags:</br>
+                                                - Key: Name</br>
+                                                  Value: App Server
+                                        </li>
+                                        </ul>
+                                    </p>
+                                    <img src="images/aw12.png" alt="data" width="720" height="408">  
+
+                                    <p>Once we edited the template, we update the stack with our revised template file. We will be able to see Instance in the changes 
+                                        section.
+                                    </p>
+                                    <h3>Task 4: Delete the Stack</h3>     
+                                    <p>In the CloudFormation console, select the file and click delete stack. The stack will show DELETE_IN_PROGRESS. After a few minutes, the stack will disappear.</p>                                
+
+                                        
+                                        
+
+                                        
+                                        
+
+                                        
+
+                                        
+                                        
+                                    
+                                
+                                 
+
+                                        
+                                        
+									
+										
+								</div>
+							</section>
+
+					</div>
+
+				
+								
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<ul class="icons">
+								
+								
+								
+								<li><a href="https://www.linkedin.com/in/muzna-c-421908178" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+							</ul>
+							
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

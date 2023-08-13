@@ -1,0 +1,388 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title> Muzna's Cloud Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><strong>Muzna's</strong> <span>Cloud Portfolio</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="landing.html">Linux</a></li>
+							<li><a href="networking.html">Networking</a></li>
+							<li><a href="databases.html">Databases</a></li>
+							<li><a href="python.html">Phython</a></li>
+							<li><a href="aws.html">AWS Major Services</a></li>
+
+
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Building a VPC and Launching a Web Server</h1>
+									</header>
+									<h3>Task 1: Creating a VPC
+                                    </h3>
+                                    <p>
+                                        Firstly, we use the VPC Wizard to create a VPC, an internet gateway, and two subnets in a single Availability Zone. An internet gateway is a VPC component that allows communication between instances in your VPC and the internet.
+                                    </p>
+                                        After creating a VPC, We can add subnets. Each subnet resides entirely within one Availability Zone and cannot span zones. If a subnet's traffic is routed to an internet gateway, the subnet is known as a public subnet. If a subnet does not have a route to the internet gateway, the subnet is known as a private subnet.
+                                        The wizard also creates a NAT gateway, which is used to provide internet connectivity to EC2 instances in private subnets.
+                                        
+                                    </p>
+                                    <img src="images/n1.png" alt="data" width="720" height="408">
+
+                                    <p>Following are the steps to create VPC:</p>
+                                    <p>
+                                        <ul>	
+										    <li>In the AWS Management Console, select the Services menu, and then select VPC under Networking & Content Delivery.
+                                            </li>
+                                            <li>In the left navigation menu, choose Elastic IPs.
+                                            </li>
+                                            <li>Choose Allocate Elastic IP address.
+                                            </li>
+                                            <li>On the Allocate Elastic IP address page, leave the default settings, and choose Allocate.
+                                            </li>
+                                            <li>In the left navigation menu, choose VPC Dashboard.
+                                            </li>
+                                            <li>Choose Launch VPC Wizard.</li>
+                                            <li>For Step 1: Select a VPC Configuration, choose VPC with Public and Private Subnets.
+                                            </li>
+                                            <li>Choose Select.
+                                            </li>
+
+                                            <li>For Step 2: VPC with Public and Private Subnets, configure the following options:
+
+                                                <ul>
+                                                    <li>Enter VPC name</li>
+                                                    <li>Select Availability zones <li>
+                                                    <li>Public subnet name: Enter Public Subnet 1
+                                                    </li>
+                                                    <li>Availability Zone: From the dropdown list, choose the first Availability Zone (the same as used above).</li>
+                                                    <li>Private subnet name: Enter Private Subnet 1</li>
+                                                    <li>Elastic IP Allocation ID: Select the box, and select the displayed IP address.
+                                                    </li>
+                                                    
+                                                </ul>
+                                            </li>
+                                            <li>Choose Create VPC.</li>
+                                            <li>On the VPC Successfully Created page, choose OK.
+                                            </li>
+                                            <img src="images/n2.png" alt="data" width="720" height="408">
+
+											
+										</ul>
+                                    </p>
+									<h3>Task 2: Creating additional Subnets:
+                                    </h3>
+                                    <p>Secondly, we will create two additional subnets in a second Availability Zone. This option is useful for creating resources in multiple Availability Zones to provide high availability.</p>
+                                    <p>Following are the steps to create additional Subnets:
+                                    </p>
+                                    <img src="images/n4.png" alt="data" width="720" height="408">
+                                    <img src="images/n7.png" alt="data" width="720" height="408">
+
+
+                                    <p>
+                                        <ul>
+                                            <li>choose Subnets.
+                                            </li>
+                                            <li>To configure the second public subnet, choose Create subnet and configure the following options:
+                                                <ul>
+                                                    <li>Choose VPC id</li>
+                                                    <li>Subnet name: Enter Public Subnet 2</li>
+                                                    <li>Availability Zone: From the dropdown list, choose the second Availability Zone.
+                                                    </li>
+                                                    <li>IPv4 CIDR block: Enter 10.0.2.0/24
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>Choose Create subnet.
+                                            </li>
+                                        </ul>
+                                    </p>
+
+                                    <h3>Task 3: Creating a route table:
+                                    </h3>
+                                    <p>Now we configure the private subnets to route internet-bound traffic to the NAT gateway so that resources in the private subnet are able to connect to the internet while still keeping the resources private. To do this, we configure a route table.
+                                    </p>
+                                    <p>Recall that a route table contains a set of rules, called routes, that are used to determine where network traffic is directed. Each subnet in a VPC must be associated with a route table; the route table controls routing for the subnet.
+                                    </p>
+                                    <img src="images/n10.png" alt="data" width="720" height="408">
+
+                                    <p>
+                                    <ul>
+                                        <li>choose Route Tables.</li>
+                                        <li>Select the check box for the route table with Yes in the Main column and Lab VPC in the VPC column. (Expand the VPC column if necessary to view the VPC name.)
+                                        </li>
+                                        <li>choose the Routes tab.
+                                            <p>Recall that Destination 0.0.0.0/0 is set to Target nat-xxxxxxxx. This means that traffic destined for the internet (0.0.0.0/0) will be sent to the NAT gateway. The NAT gateway will then forward the traffic to the internet.
+                                                This route table is therefore being used to route traffic from private subnets.
+                                                </p>
+                                        </li>
+                                        <li>In the Name column for this route table, choose the pencil , enter the Private Route Table and then choose Save.
+                                        </li>
+
+                                    </ul>
+                                    </p>
+                                    <img src="images/n8.png" alt="data" width="720" height="408">
+
+
+
+                                    <h3>Task 4: Associate the subnets & add routes
+                                    </h3>
+                                    <img src="images/n9.png" alt="data" width="720" height="408">
+
+                                    <p>
+                                        <ul>
+                                            <li>
+                                                choose the Subnet associations tab
+                                            </li>
+                                            <li>
+                                                Under Subnets without explicit associations, choose Edit subnet associations.
+
+                                            </li>
+                                            <li>
+                                                Select the check boxes for both Private Subnet 1 and Private Subnet 2.
+
+                                            </li>
+                                            <li>
+                                                Choose Save associations.
+                                                You now configure the route table that is used by the public subnets.
+                                            </li>
+                                            <li>
+                                                Select the check box for the route table with No in the Main column and Lab VPC in the VPC column, and clear the check boxes for any other route tables.
+
+                                            </li>
+                                            <li>
+                                                In the Name column for this route table, choose the pencil , enter the Public Route Table and then choose Save.
+
+                                            </li>
+                                            <li>
+                                                choose the Routes tab.
+
+                                            </li>
+                                            <li>Choose the Subnet associations tab.
+                                            </li>
+                                            <li>In the Subnets without explicit associations section, choose Edit subnet associations.
+                                            </li>
+                                            <li>Select the check boxes for both Public Subnet 1 and Public Subnet 2.
+                                            </li>
+                                            <li>Choose Save associations.</li>
+                                        </ul>
+                                    </p>
+
+                                    <h3>Tasks 5: Create a VPC security group
+                                    </h3>
+                                    <p>In this task, we create a VPC security group, which acts as a virtual firewall for our instance. When you launch an instance, we associate one or more security groups with the instance. we can add rules to each security group that allow traffic to or from its associated instances.
+                                    </p>
+                                    <img src="images/n12.png" alt="data" width="720" height="408">
+
+                                    <p>
+                                        <ul>
+                                            <li>choose Security Groups.
+                                            </li>
+                                            <li>Choose Create security group.</li>
+                                            <li>Configure the security group with the following options:
+                                                <ul>
+                                                    <li>Security group name: Enter Web Security Group
+                                                    </li>
+                                                    <li>Description: Enter Enable HTTP access
+                                                    </li>
+                                                    <li>Choose VPC.
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>Choose Create security group.
+                                            </li>
+                                            <li>Choose the Inbound rules tab.</li>
+                                            <li>Choose Edit inbound rules
+                                            </li>
+                                            <li>Choose Add rule.
+                                            </li>
+                                            <li>Configure the following options:
+                                                <ul>
+                                                    <li>Type: Choose HTTP.
+                                                    </li>
+                                                    <li>Source: Choose Anywhere.
+                                                    </li>
+                                                    <li>Description: Enter Permit web requests
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        
+                                        </ul>
+                                    </p>
+                                    <img src="images/n13.png" alt="data" width="720" height="408">
+
+                                    <h3>Tasks 6: Launch a web server
+                                    </h3>
+                                    <p>Lastly, we launch an EC2 instance into the new VPC. we configure the instance to act as a web server.
+                                    </p>
+                                    <img src="images/n14.png" alt="data" width="720" height="408">
+
+                                    <p>
+                                        <ul>
+                                            <li>In the AWS Management Console, select the Services menu, and then select EC2 under Compute.
+                                            </li>
+                                            <li>Choose Launch instances
+                                                First, you choose an Amazon Machine Image (AMI), which contains the desired operating system.
+                                            </li>
+                                            <li>For Step 1: Choose an Amazon Machine Image (AMI), choose Select for Amazon Linux 2 AMI (HVM) - Kernel 5.10, SSD Volume Type.
+                                                The instance type defines the hardware resources assigned to the instance.
+                                            </li>
+                                            <li>For Step 2: Choose an Instance Type, choose the check box for t2.micro.
+                                            </li>
+                                            <li>Choose Next: Configure Instance Details
+                                                You now configure the instance to launch in a public subnet of the new VPC.
+                                            </li>
+                                            <li>For Step 3: Configure Instance Details, configure the following settings:
+                                                <ul>
+                                                    <li>Choose Network</li>
+                                                    <li>Subnet: Choose Public Subnet 2. (Be careful not to choose the private subnet.)
+                                                    </li>
+                                                    <li>Auto-assign Public IP: Choose Enable.
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <img src="images/n15.png" alt="data" width="720" height="408">
+
+                                            <li>Expand the Advanced Details section.
+                                            </li>
+                                            <li>Customise the User data with following code:
+                                                <p>
+                                                    <img src="images/n16.png" alt="data" width="720" height="408">
+
+                                                </p>
+                                                
+                                                <p>This script runs automatically when the instance launches for the first time. The script loads and configures a PHP web application.
+                                                </p>
+                                            </li>
+                                            <li>Choose Next: Add Storage
+                                            </li>
+                                            <li>For Step 4: Add Storage, you use the default settings for storage. Choose Next: Add Tags to move onto the next step.
+                                                Tags can be used to identify resources. You use a tag to assign a name to the instance.
+                                            </li>
+                                            <li>For Step 5: Add Tags, choose Add Tag
+                                            </li>
+                                            <li>Configure the following options:
+                                                <ul>
+                                                    <li>Key: Enter Name
+                                                    </li>
+                                                    <li>Value: Enter Web Server 1
+                                                    </li>
+                                                </ul>
+                                        
+                                            </li>
+                                            <img src="images/n17.png" alt="data" width="720" height="408">
+
+                                            <li>Choose Next: Configure Security Group
+                                                You configure the instance to use the Web Security Group that you created earlier.
+                                            </li>
+                                            <li>For Step 6: Configure Security Group, Assign a security group, Select an existing security group.
+                                            </li>
+                                            <li>Select the check box for the vockey | RSA security group.
+                                                This is the security group that you created in the previous task. It permits HTTP access to the instance.
+                                            </li>
+                                            <li>Choose Review and Launch
+                                            </li>
+                                            <li>When prompted with a warning that you will not be able to connect to the instance through port 22, choose Continue
+                                            </li>
+                                            <li>For Step 7: Review Instance Launch, review the instance information, and choose Launch
+                                            </li>
+                                            <li>In the Select an existing key pair or create a new key pair window, select the check box next to I acknowledge that I have access to the corresponding private key file, and that without this file, I won't be able to log into my instance.
+                                            </li>
+                                            <li>Choose Launch Instances
+                                            </li>
+                                            <li>Choose View Instances
+                                            </li>
+                                            <li>Wait until the Web Server 1 shows 2/2 checks passed in the Status check column.
+                                                This may take a few minutes. To update the page, choose refresh at the top of the page.
+                                                You now connect to the web server running on the EC2 instance.
+                                            </li>
+                                            <img src="images/n19.png" alt="data" width="720" height="408">
+
+                                            <li>Select the check box for the instance, and choose the Details tab.
+                                                And copy the Public IPv4 DNS value.
+                                            </li>
+                                            <li>Open a new web browser tab, paste the Public IPv4 DNS value, and press Enter.
+                                            </li>
+                                            <img src="images/n20.png" alt="data" width="720" height="408">
+
+                                        </ul>
+                                    </p>
+								</div>
+							</section>
+
+					</div>
+
+				<!-- Contact -->
+					<section id="contact">
+						<div class="inner">
+							
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Email</h3>
+										<a href="#">muznatallat77@gmail.com</a>
+									</div>
+								</section>
+								
+							</section>
+						</div>
+					</section>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<ul class="icons">
+								
+								
+								<li><a href="https://www.linkedin.com/in/muzna-c-421908178" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+							</ul>
+							<ul class="copyright">
+								<li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
